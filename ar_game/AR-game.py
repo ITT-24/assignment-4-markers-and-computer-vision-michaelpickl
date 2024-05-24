@@ -62,8 +62,14 @@ def on_draw():
         # hand.get_player(transformed_game)
         rectangle.draw()
         hand_position = h.detect_hand(transformed_game)
-        print(hand_position[0])
-        circle = pyglet.shapes.Circle(hand_position[0], hand_position[1], 100, color=(50, 225, 30))
+
+        pyglet_y = window.height - hand_position[1]
+
+        # Optionally, scale the coordinates to match the Pyglet window dimensions
+        scaled_x = hand_position[0] * (window.width / frame.shape[1])
+        scaled_y = pyglet_y * (window.height / frame.shape[0])
+        #this is going to be the knife
+        circle = pyglet.shapes.Circle(scaled_x, scaled_y, 100, color=(50, 225, 30))
         circle.draw()
 
 
