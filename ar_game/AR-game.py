@@ -88,9 +88,7 @@ def check_collision():
            knife.x + knife.width > fruit.x and \
            knife.y < fruit.y + fruit.height and \
            knife.y + knife.height > fruit.y:
-            # Collision detected, remove the fruit
             fruits.remove(fruit)
-            # Increase score
             score += 1
 
 @window.event
