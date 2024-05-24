@@ -5,7 +5,7 @@ import cv2.aruco as aruco
 game_corners = []
 points = {}
 
-
+#parts ar from aruco_sample.py
 def get_window(detector, frame, ret):
     global game_corners
 
@@ -35,7 +35,7 @@ def sort_ids(corners, ids) -> list:
 
     if (len(ids) > 4):
         return [points['left_upper'], points['right_upper'], points['right_down'], points['left_down']]
-    elif (len(ids == 4)):
+    elif (len(ids) == 4):
         for i in range(len(ids)):
             id = ids[i][0]
             if id == 0:
@@ -50,19 +50,11 @@ def sort_ids(corners, ids) -> list:
         return [points['left_upper'], points['right_upper'], points['right_down'], points['left_down']]
 
 def game_transform(corners, frame):
-    # https://docs.opencv.org/4.x/d3/df2/tutorial_py_basic_ops.html
     y, x, channel = frame.shape
-    flipped_frame = cv2.flip(frame, 0)
     pt1 = np.array(corners, dtype=np.float32)
     pt2 = np.array([[0, 0], [x, 0], [x, y], [0, y]], dtype=np.float32)
     
     matrix = cv2.getPerspectiveTransform(pt1, pt2)
  
-    game_transformed = cv2.warpPerspective(flipped_frame, matrix, (x, y))
+    game_transformed = cv2.warpPerspective(frame, matrix, (x, y))
     return game_transformed
-
-
-
-
-
-

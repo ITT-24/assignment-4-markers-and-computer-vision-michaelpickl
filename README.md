@@ -9,3 +9,8 @@ Die Punkte mussen in einer bestimmten Reihenfolge ausgewählt werden, damit das 
 -> oben links -> oben rechts -> unten rechts -> unten links 
 
 # Aufgabe 2
+In der Aufgabe zwei wird der Spiel aus dem ersten Assignment wieder aufgeriffen. Das Spielprinzip bleibt das gleiche, der Code wurde jedoch angepasst.
+Mit der Hand wird das Messer gesteuert, mit dem die Früchte zerstört werden. am besten lässt sich das Messer steuern, wenn die Hand von unten in den Bereich der Marker kommt. <br>
+Nachdem 20 Früchte zerstört wurden ist das Spiel zuende. <br>
+
+Das Spiel hat ein Problem wenn man zu viel Haut sieht, am besten sieht es beim starten erstmal nur den Canvas mit den Markern und dann beginnt man mit der Hand das Messer zu steuern
