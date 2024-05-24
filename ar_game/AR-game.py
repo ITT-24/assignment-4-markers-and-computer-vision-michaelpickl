@@ -5,11 +5,14 @@ import sys
 import numpy as np
 import pyglet
 from PIL import Image
+import hand as h
 
 video_id = 0
 
 if len(sys.argv) > 1:
     video_id = int(sys.argv[1])
+
+rectangle = pyglet.shapes.Rectangle(250, 300, 400, 200, color=(255, 22, 20))
 
 cap = cv2.VideoCapture(video_id)
 ret, frame = cap.read()
@@ -19,23 +22,23 @@ detector = cv2.aruco.ArucoDetector(aruco_dict, aruco_params)
 
 # converts OpenCV image to PIL image and then to pyglet texture
 # https://gist.github.com/nkymut/1cb40ea6ae4de0cf9ded7332f1ca0d55
-def cv2glet(img,fmt):
+def cv2glet(img, fmt):
     '''Assumes image is in BGR color space. Returns a pyimg object'''
     if fmt == 'GRAY':
-      rows, cols = img.shape
-      channels = 1
+        rows, cols = img.shape
+        channels = 1
     else:
-      rows, cols, channels = img.shape
+        rows, cols, channels = img.shape
 
     raw_img = Image.fromarray(img).tobytes()
 
     top_to_bottom_flag = -1
-    bytes_per_row = channels*cols
-    pyimg = pyglet.image.ImageData(width=cols, 
-                                   height=rows, 
-                                   fmt=fmt, 
-                                   data=raw_img, 
-                                   pitch=top_to_bottom_flag*bytes_per_row)
+    bytes_per_row = channels * cols
+    pyimg = pyglet.image.ImageData(width=cols,
+                                    height=rows,
+                                    fmt=fmt,
+                                    data=raw_img,
+                                    pitch=top_to_bottom_flag * bytes_per_row)
     return pyimg
 
 # Create a video capture object for the webcam
@@ -56,6 +59,15 @@ def on_draw():
         img = cv2glet(transformed_game, 'BGR')
         img.blit(0, 0, 0)
         print('in game')
+        # hand.get_player(transformed_game)
+        rectangle.draw()
+        hand_position = h.detect_hand(transformed_game)
+        print(hand_position[0])
+        circle = pyglet.shapes.Circle(hand_position[0], hand_position[1], 100, color=(50, 225, 30))
+        circle.draw()
+
+
+       
         # hier kommt des ganze spiel logik rein
     else:
         # If transformation was unsuccessful, draw the original frame
@@ -63,7 +75,3 @@ def on_draw():
         img.blit(0, 0, 0)
 
 pyglet.app.run()
-
-
-
-
