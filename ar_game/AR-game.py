@@ -9,20 +9,10 @@ import hand as h
 from pyglet.gl import *
 
 # Set video source
-video_id = 0
+video_id = 2
 if len(sys.argv) > 1:
     video_id = int(sys.argv[1])
 
-# create knife sprite
-knife_img = pyglet.image.load('images/knife.png')
-knife = pyglet.sprite.Sprite(knife_img)
-knife.scale = 0.1
-
-# create list of fruit images
-fruit_images = ['images/apple.png', 'images/lemon.png', 'images/cherry.png', 'images/pear.png', 'images/strawberry.png']
-fruits = []
-
-fruit_batch = pyglet.graphics.Batch()
 
 # Score variable
 score = 0
@@ -40,6 +30,20 @@ WINDOW_HEIGHT = frame.shape[0]
 
 # create the  window
 window = pyglet.window.Window(WINDOW_WIDTH, WINDOW_HEIGHT)
+
+# AS: sprites have to be created after the window
+
+# create knife sprite
+knife_img = pyglet.image.load('images/knife.png')
+knife = pyglet.sprite.Sprite(knife_img)
+knife.scale = 0.05
+
+# create list of fruit images
+fruit_images = ['images/apple.png', 'images/lemon.png', 'images/cherry.png', 'images/pear.png', 'images/strawberry.png']
+fruits = []
+
+fruit_batch = pyglet.graphics.Batch()
+
 
 # tracking states to allow game mechanics
 transformation_successful = False
@@ -65,7 +69,7 @@ def drop_fruit(dt):
     global fruits
     if transformation_successful:  # only drops fruits if transformation is successful
         fruit_image = pyglet.image.load(random.choice(fruit_images))
-        fruit_sprite = pyglet.sprite.Sprite(fruit_image, x=random.randint(0, window.width - fruit_image.width), y=window.height, batch=fruit_batch)
+        fruit_sprite = pyglet.sprite.Sprite(fruit_image, x=random.randint(10, 50), y=window.height, batch=fruit_batch)
         fruit_sprite.scale = 0.5 
         fruits.append(fruit_sprite)
 
@@ -93,7 +97,7 @@ def check_collision():
 
 @window.event
 def on_draw():
-    global transformation_successful, is_drop_fruit_scheduled
+    global transformation_successful, is_drop_fruit_scheduled, knife
 
     window.clear()
     ret, frame = cap.read()
@@ -106,12 +110,13 @@ def on_draw():
             img.blit(0, 0, 0)
             #get hand position
             hand_position = h.detect_hand(transformed_game)
-            pyglet_y = window.height - hand_position[1]
-            scaled_x = hand_position[0] * (window.width / frame.shape[1])
-            scaled_y = pyglet_y * (window.height / frame.shape[0])
+            if hand_position is not None:
+                pyglet_y = window.height - hand_position[1]
+                scaled_x = hand_position[0] * (window.width / frame.shape[1])
+                scaled_y = pyglet_y * (window.height / frame.shape[0])
 
-            knife.x = scaled_x
-            knife.y = scaled_y
+                knife.x = scaled_x
+                knife.y = scaled_y
             knife.draw()
 
             # Schedule the fruit drop function if it's not already scheduled from chatgpt
